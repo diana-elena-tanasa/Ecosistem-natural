@@ -23,6 +23,6 @@ public class SursaApa {
         this.capacitate = capacitate;
     }
     public void regenerare(){
-
+        this.capacitate = Math.min(100, this.capacitate + 10);
     }
 }

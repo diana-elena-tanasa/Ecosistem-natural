@@ -65,9 +65,60 @@ public class Padure {
         this.anotimp = anotimp;
     }
     public void simuleazaZi(){
+        for (Animal animal : animale) {
+            if (!animal.isEsteViu()) continue;
+
+            animal.misca();
+            if (animal.getEnergie() < 30) {
+                animal.odihneste();
+            }
+
+            if (animal instanceof Ierbivor) {
+                ((Ierbivor) animal).pasuneaza(plante);
+            }
+
+            if (animal instanceof Pradator) {
+                ((Pradator) animal).vaneaza(
+                        animale.stream()
+                                .filter(a -> a instanceof Ierbivor && a.isEsteViu())
+                                .map(a -> (Ierbivor) a)
+                                .toList()
+                );
+            }
+        }
+
+        for (Planta planta : plante) {
+            planta.creste();
+        }
+
+        System.out.println("Raport zi " + ziCurenta);
+        System.out.println("Animale:");
+        for (Animal a : animale) {
+            System.out.println(a);
+        }
+        System.out.println("Plante:");
+        for (Planta p : plante) {
+            System.out.printf("Planta: %s la (%d, %d), energie: %.1f, mancabila: %b\n",
+                    p.getTip(),
+                    p.getPozitie().getX(),
+                    p.getPozitie().getY(),
+                    p.getEnergieNutritiva(),
+                    p.isPoateFiMancata());
+        }
+        ziCurenta++;
 
     }
     public void actualizeazaAnotimp(){
+        int zi = ziCurenta % 365;
 
+        if (zi < 90) {
+            anotimp = Anotimp.PRIMAVARA;
+        } else if (zi < 180) {
+            anotimp = Anotimp.VARA;
+        } else if (zi < 270) {
+            anotimp = Anotimp.TOAMNA;
+        } else {
+            anotimp = Anotimp.IARNA;
+        }
     }
 }
